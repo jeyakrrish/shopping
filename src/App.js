@@ -1,5 +1,3 @@
-import './App.css';
-
 const categories = [
   {
     id: 1,
