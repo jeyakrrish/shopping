@@ -1,0 +1,27 @@
+@font-face {
+  font-family: "open sans condensed";
+  font-weight: lighter;
+  font-display: swap;
+  src: url(./assets/font/open-sans-condensed.light.ttf);
+}
+
+body {
+  margin: 0;
+  font-family: "open sans condensed", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+* {
+  box-sizing: border-box;
+}
