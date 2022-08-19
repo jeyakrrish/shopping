@@ -73,3 +73,5 @@ export const SignInUserWithEmailAndPassword = async (email, password) => {
 
   return await signInWithEmailAndPassword(auth, email, password);
 }
+
+export const signOutUser = () => signOut(auth);
