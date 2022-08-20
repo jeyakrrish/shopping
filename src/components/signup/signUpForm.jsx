@@ -17,16 +17,20 @@ const SignUpForm = ({errorMsg}) => {          //component
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { displayName, email, password, confirmPassword } = formFields;
 
-  const {setCurrentUser} = useContext(UserContext);
+  const {currentUser} = useContext(UserContext);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    // new concept !!!
     setFormFields({ ...formFields, [name]: value });  //Object notation !!!
   }
 
   const onHandleSubmit = async (e) => {
     e.preventDefault();
+    
+    if(currentUser) {
+      alert("Already authenticated!");
+      return;
+    }
 
     if (password !== confirmPassword) {
       alert("entered passwords not matching");
@@ -34,12 +38,10 @@ const SignUpForm = ({errorMsg}) => {          //component
     }
 
     try {
-
-      const { user } = await createAuthUserWithEmailAndPassword(email, password);
-      setCurrentUser(user);
-
-      const userDocRef = await createUserDocumentFromAuth(user, { displayName });
-      console.log("Signned Up",userDocRef);
+      
+      const {user} = await createAuthUserWithEmailAndPassword(email, password);
+      createUserDocumentFromAuth(user, { displayName });
+      console.log("Signed Up with Email and Password");
       setFormFields(defaultFormFields);
   
     } catch (error) {

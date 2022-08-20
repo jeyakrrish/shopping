@@ -7,12 +7,11 @@ import './navigation.styles.scss';
 
 const NavBar = () => {
 
-  const { currentUser, setCurrentUser } = useContext(UserContext);
-  console.log("Navi", currentUser);
+  const { currentUser } = useContext(UserContext);
 
   const logOut = async ()=>{
     await signOutUser();
-    setCurrentUser(null);
+    console.log("signed out");
   }
   
   return (

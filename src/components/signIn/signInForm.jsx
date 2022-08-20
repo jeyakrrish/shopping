@@ -1,6 +1,5 @@
 import { useState, useContext } from "react";
-import { createUserDocumentFromAuth, SignInUserWithEmailAndPassword, signInWithGooglePopup } from "../../utils/firebase/firebase-config";
-// import { getRedirectResult } from "firebase/auth";
+import { SignInUserWithEmailAndPassword, signInWithGooglePopup } from "../../utils/firebase/firebase-config";
 import FormInput from "../form-input/form-input.component";
 import Button from "../button/button.component";
 import { UserContext } from "../../context/UserContext.";
@@ -11,13 +10,13 @@ const defaultFormFields = {
   password: '',
 }
 
-const SignInForm = ({errorMsg}) => {
+const SignInForm = ({ errorMsg }) => {
   // console.log("signin",UserContext);
 
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { email, password } = formFields;
 
-  const { currentUser, setCurrentUser } = useContext(UserContext);
+  const { currentUser } = useContext(UserContext);
 
   const changeHandle = (e) => {
     const { name, value } = e.target;
@@ -26,12 +25,14 @@ const SignInForm = ({errorMsg}) => {
 
   const submitHandle = async (e) => {
     e.preventDefault();
+
+    if (currentUser) {
+      alert("Already authenticated!");
+      return;
+    }
+
     try {
-      const { user } = await SignInUserWithEmailAndPassword(email, password);
-      setCurrentUser(user);
-     
-      const userDocRef = await createUserDocumentFromAuth(user);
-      console.log("Signned In", userDocRef);
+      await SignInUserWithEmailAndPassword(email, password);
       setFormFields(defaultFormFields);
     } catch (error) {
       errorMsg(error);
@@ -39,22 +40,23 @@ const SignInForm = ({errorMsg}) => {
   }
 
   const loginGoogle = async () => {
-    if(currentUser) return alert("Already in use!!!");
+
+    if (currentUser) {
+      alert("Already authenticated!");
+      return;
+    }
 
     try {
-      const { user } = await signInWithGooglePopup();
-      setCurrentUser(user);
-     
-      const userDocRef = await createUserDocumentFromAuth(user);
-      console.log("Signned in with Google", userDocRef);
+      await signInWithGooglePopup();
+      console.log("Signned in with Google");
     } catch (error) {
       errorMsg(error);
     }
   }
 
   return (
-    <div className='sign-in-container'> 
-    <h1>I already have an account</h1>
+    <div className='sign-in-container'>
+      <h1>I already have an account</h1>
       <span>Sign in with your email and password</span>
       <form onSubmit={submitHandle}>
         <FormInput
