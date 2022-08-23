@@ -20,7 +20,6 @@ export const UserProvider = ({ children }) => {
         setCurrentUser(user);
         // console.log("User autheticated data :", user);
       });
-      console.log(subscribe);
       return subscribe;
     }, []
   )
