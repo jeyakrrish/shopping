@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { SignInUserWithEmailAndPassword, signInWithGooglePopup } from "../../utils/firebase/firebase-config";
+import { SignInUserWithEmailAndPassword, signInWithGooglePopup, signInWithGoogleRedirect } from "../../utils/firebase/firebase-config";
 import FormInput from "../form-input/form-input.component";
 import Button, {BUTTON_TYPE_CLASS} from "../button/button.component";
 import { UserContext } from "../../context/user-context.";
@@ -46,7 +46,7 @@ const SignInForm = ({ errorMsg }) => {
     }
 
     try {
-      await signInWithGooglePopup();
+      await signInWithGoogleRedirect();
       console.log("Signned in with Google");
     } catch (error) {
       errorMsg(error);

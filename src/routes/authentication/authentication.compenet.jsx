@@ -15,6 +15,9 @@ const Authentication = () => {
       case 'auth/wrong-password':
         alert("Wrong password");
         break;
+        case 'auth/unauthorized-domain':
+          alert("Firebase error ocurred");
+          break;
       case "auth/email-already-in-use":
         alert('Can not create user, email already in use');
         break;
