@@ -1,16 +1,46 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useReducer } from "react";
 import { onAuthStateChangedListener } from "../utils/firebase/firebase-config";
 import { createUserDocumentFromAuth } from "../utils/firebase/firebase-config";
 
-//as the actual value
+import { createAction } from "../utils/reducer/reducer.utils";
+
 export const UserContext = createContext({
   currentUser: null,
   setCurrentUser: () => null
 })
 
+export const ACTION_TYPES = {
+  SetCurrentUser: 'SET_CURRENT_USER',
+}
+
+const userReducer = (state, action) => {
+
+  const { type, payload } = action;
+
+  switch (type) {
+    case ACTION_TYPES.SetCurrentUser:
+      return {
+        ...state,
+        currentUser: payload,
+      }
+      
+    default:
+      throw new Error(`Unhandled exception type ${type} was ocurred`);
+  }
+}
+
+const initialValue = {
+  currentUser: null,
+}
 
 export const UserProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(null);
+
+  const [state, dispatch] = useReducer(userReducer, initialValue);
+  const { currentUser } = state;      
+  
+  const setCurrentUser = (user) => {
+    dispatch(createAction(ACTION_TYPES.SetCurrentUser, user));
+  }
 
   useEffect(
     () => {
@@ -18,15 +48,12 @@ export const UserProvider = ({ children }) => {
         if (user) createUserDocumentFromAuth(user);
 
         setCurrentUser(user);
-        // console.log("User autheticated data :", user);
       });
       return subscribe;
-    }, []
-  )
+    }, [] );
 
   const value = {
     currentUser,
-    setCurrentUser
   }
 
   return (

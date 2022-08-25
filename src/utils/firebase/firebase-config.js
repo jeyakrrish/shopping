@@ -60,13 +60,12 @@ export const getCollectionAndDocuments = async () => {          //used to avoid 
   const q = query(collectionRef);
   const querySnapshot = await getDocs(q);
 
-  const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
-    const { title, items } = docSnapshot.data();      // {
-    acc[title.toLocaleLowerCase()] = items;           //   title: {  id: 1,    
-    return acc;                                       //              name:'abcd',        
-  }, {});                                             //           }
-                                                      // }
-  return categoryMap;
+  return querySnapshot.docs.reduce((acc, docSnapshot) => {
+    const { title, items } = docSnapshot.data();      
+    acc[title.toLocaleLowerCase()] = items;             //   {title: [ {}, {}, {}, {},{} ], [title:[{}]]    
+    return acc;
+  }, {});
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////

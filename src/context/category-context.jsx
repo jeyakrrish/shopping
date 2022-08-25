@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useReducer, useEffect } from "react";
 
 import { addCollectionDocuments, getCollectionAndDocuments } from "../utils/firebase/firebase-config";
 
@@ -9,13 +9,41 @@ import { addCollectionDocuments, getCollectionAndDocuments } from "../utils/fire
 export const CategoryContext = createContext({
   categoryMap: {},
 });
+///////////////////////////////////////////////////////
+const CATEGORY_ACTION_TYPES = {
+  CATEGORYMAP :'CATEGORYMAP',
+}
 
-//PROVIDER COMPONENT
+const categoryReducer = (state, action) =>{
+  const { type, payload } = action;
+
+  switch(type) {
+    case CATEGORY_ACTION_TYPES.CATEGORYMAP:
+      return {
+        ...state,
+        categoryMap: payload,
+      }
+    default:
+      throw new Error(`unhandled exception occured for type ${type}`);
+  }
+}
+
+const initialValue = {
+  categoryMap : {},
+}
+///////////////////////////////////////////////////////
+
 export const CategoryContextProvider = ({ children }) => {
-  const [categoryMap, setCategoryMap] = useState({});
+  
+  const [state, dispatch] = useReducer(categoryReducer, initialValue);
+  const {categoryMap} = state;
 
   const value = {
     categoryMap,
+  }
+
+  const setCategoryMap = (categoryMap) => {
+    dispatch ({type:CATEGORY_ACTION_TYPES.CATEGORYMAP, payload:categoryMap})
   }
 
   useEffect(()=>{
