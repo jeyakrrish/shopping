@@ -1,25 +1,30 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Outlet } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import CartDropDown from '../../components/cart-dropdown/cart-dropdown.component';
 import CartIcon from '../../components/cart-icon/cart-icon.component';
 
-import { UserContext } from '../../context/user-context.';
 import { CartContext } from '../../context/cart-context';
 
 import { ReactComponent as Crown } from '../../assets/crown.svg';
 import { signOutUser } from '../../utils/firebase/firebase-config';
 
+import { userSelector } from '../../store/user/user.selector';
+
 import { NavigationContainer, LogoContainer, NavLinkContainer, NavLinksContainer, Logo } from './navigation.styles.js';
+import { CartSliceSelector } from '../../store/cart/cart.selector';
 
 const NavBar = () => {
 
-  const { currentUser } = useContext(UserContext);
-  const { isCartOpen } = useContext(CartContext);
+  const  {isCartOpen} = useSelector(CartSliceSelector);
+
+  const currentUser = useSelector((state) => userSelector(state));
 
   const logOut = async () => {
     await signOutUser();
     console.log("signed out");
+
   }
 
   return (

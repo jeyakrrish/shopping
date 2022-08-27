@@ -1,9 +1,11 @@
-import { useState, useContext } from "react";
-import { SignInUserWithEmailAndPassword, signInWithGooglePopup, signInWithGoogleRedirect } from "../../utils/firebase/firebase-config";
+import { useState, useContext, useEffect } from "react";
+import { auth, SignInUserWithEmailAndPassword, signInWithGooglePopup, signInWithGoogleRedirect } from "../../utils/firebase/firebase-config";
 import FormInput from "../form-input/form-input.component";
 import Button, {BUTTON_TYPE_CLASS} from "../button/button.component";
-import { UserContext } from "../../context/user-context.";
+import { useSelector } from "react-redux";
 import {SignInContainer, BtnContainer } from './sign-in-form.styles';
+import { userSelector } from "../../store/user/user.selector";
+import { getRedirectResult } from "firebase/auth";
 
 const defaultFormFields = {
   email: '',
@@ -15,7 +17,7 @@ const SignInForm = ({ errorMsg }) => {
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { email, password } = formFields;
 
-  const { currentUser } = useContext(UserContext);
+  const  currentUser  = useSelector(userSelector);
 
   const changeHandle = (e) => {
     const { name, value } = e.target;

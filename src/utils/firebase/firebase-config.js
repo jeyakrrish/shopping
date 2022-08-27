@@ -25,7 +25,6 @@ const firebaseConfig = {
 
 const firebaseApp = initializeApp(firebaseConfig);      //firebase App
 
-//authentication
 const googleProvider = new GoogleAuthProvider();  //new instance of GoogleAuthProvider
 googleProvider.getCustomParameters({
   prompt: 'select_account'                      //google's features
@@ -39,7 +38,7 @@ export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googlePro
 
 export const db = getFirestore(firebaseApp);
 
-////////////////////////////////////////////////////////////////////////////////////////////
+
 export const addCollectionDocuments = async (collectionKey, objectsToAdd) => {
   const collectionRef = collection(db, collectionKey);   //collectionKey = "category"
   const batch = writeBatch(db);
@@ -47,7 +46,6 @@ export const addCollectionDocuments = async (collectionKey, objectsToAdd) => {
   //data adding with docRef using collectionRef
   objectsToAdd.forEach(object => {
     const docRef = doc(collectionRef, object.title.toLocaleLowerCase());
-    // setDoc(docRef, object);
     batch.set(docRef, object);
   });
 
@@ -60,12 +58,7 @@ export const getCollectionAndDocuments = async () => {          //used to avoid 
   const q = query(collectionRef);
   const querySnapshot = await getDocs(q);
 
-  return querySnapshot.docs.reduce((acc, docSnapshot) => {
-    const { title, items } = docSnapshot.data();      
-    acc[title.toLocaleLowerCase()] = items;             //   {title: [ {}, {}, {}, {},{} ], [title:[{}]]    
-    return acc;
-  }, {});
-
+  return querySnapshot.docs.map((docSnapshot) => docSnapshot.data());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -106,6 +99,9 @@ export const SignInUserWithEmailAndPassword = async (email, password) => {
   return await signInWithEmailAndPassword(auth, email, password);
 }
 
+export const onAuthStateChangedListener = (callback, errorCallback, completeCallback) => {
+  onAuthStateChanged(auth, callback, errorCallback, completeCallback);
+}
 export const signOutUser = async () => await signOut(auth);
 
 /**
@@ -115,6 +111,3 @@ export const signOutUser = async () => await signOut(auth);
  * error  => callback triggered on error
  * compleated => callback triggered on Complete
  * */
-export const onAuthStateChangedListener = (callback, errorCallback, completeCallback) => {
-  onAuthStateChanged(auth, callback, errorCallback, completeCallback);
-}
