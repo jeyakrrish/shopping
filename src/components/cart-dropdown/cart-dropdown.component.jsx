@@ -9,7 +9,7 @@ import { CartSliceSelector } from '../../store/cart/cart.selector';
 import { CartDropdownContainer, CartItems, EmptyMessage } from './cart-dropdown.styles';
 
 const CartDropDown = () => {
-  const { cartItems} = useSelector(CartSliceSelector);
+  const cartItems = useSelector(CartSliceSelector);
 
   const navigate = useNavigate();               // new concept
 

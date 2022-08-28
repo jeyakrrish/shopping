@@ -1,26 +1,26 @@
-import { applyMiddleware, compose, configureStore } from '@reduxjs/toolkit';
-// import logger from 'redux-logger';
+import { configureStore } from '@reduxjs/toolkit';
+import  thunk  from 'redux-thunk';
+
+import logger from 'redux-logger';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
 import { rootReducer } from './root.reducer';
 
-const loggedMiddleware = (store) => (next) => (action) => {
-  if (!action.type) return next(action);
 
-  console.log("===>Current state", store.getState());
-  console.log("===>Type", action.type);
-  console.log("===>Payload", action.payload);
+const middlewares = [process.env.NODE_ENV !== 'production' && logger].filter(Boolean);  // OR !==production
 
-  next(action);
-
-  console.log("===>Next state", store.getState());
-
+const persistConfig = {
+  key: 'root',           //persist whole thing,  start from root level
+  storage,               //what do we want to store this into
+  blacklist: ['user'],   //don't want to persist, bcz authListener will takeCare
 }
 
-const middleware = [loggedMiddleware];
-
-const composedEnhancer = compose(applyMiddleware(...middleware));
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
-  reducer: rootReducer,
-  middleware,
+  reducer: persistedReducer,    // reducer:rootReducer
+  middleware: middlewares,
 });
+
+export const persistor = persistStore(store);

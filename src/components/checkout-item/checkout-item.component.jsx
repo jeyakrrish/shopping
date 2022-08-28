@@ -1,27 +1,20 @@
-// import { useContext } from 'react';
-// import { CartContext } from '../../context/cart-context';
-
-import { useDispatch, useSelector } from 'react-redux';
-import { addCartItem, deleteFromCart, removeFromCart } from '../../store/cart/cart.helper.js';
-import { setCartItems } from '../../store/cart/cart.action.js';
+import { useSelector, useDispatch } from 'react-redux';
+import { addItemToCart, removeCartItem, deleteCartItem } from '../../store/cart/cart.action.js';
+import { CartSliceSelector } from '../../store/cart/cart.selector';
 
 import { CheckoutItemContainer, ImageContainer, Img, Name, Quantity, Price, Value, Arrow, RemoveButton } from './checkout-item.styles.js';
-import { CartSliceSelector } from '../../store/cart/cart.selector.js';
 
 const CheckoutItem = ({ cartItem }) => {
-
-  const { cartItems } = useSelector(CartSliceSelector);
-  const dispatch = useDispatch();
-
-  // const { addItemToCart, removeCartItem, deleteCartItem } = useContext(CartContext);
-
   const { name, price, imageUrl, quantity } = cartItem;
 
-  const increaser = () => dispatch(setCartItems(addCartItem(cartItems, cartItem)));
+  const dispatch = useDispatch();
+  const cartItems = useSelector(CartSliceSelector);
 
-  const decreaser = () => dispatch(setCartItems(removeFromCart(cartItems, cartItem)));
+  const increaser = () => dispatch(addItemToCart(cartItems, cartItem));
 
-  const remover = () => dispatch(setCartItems(deleteFromCart(cartItems, cartItem)));
+  const decreaser = () => dispatch(removeCartItem(cartItems, cartItem));
+
+  const remover = () => dispatch(deleteCartItem(cartItems, cartItem));
 
   return (
     <CheckoutItemContainer>

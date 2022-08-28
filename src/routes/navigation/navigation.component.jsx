@@ -4,20 +4,19 @@ import { useSelector } from 'react-redux';
 
 import CartDropDown from '../../components/cart-dropdown/cart-dropdown.component';
 import CartIcon from '../../components/cart-icon/cart-icon.component';
-
-import { CartContext } from '../../context/cart-context';
-
 import { ReactComponent as Crown } from '../../assets/crown.svg';
+
 import { signOutUser } from '../../utils/firebase/firebase-config';
 
 import { userSelector } from '../../store/user/user.selector';
+import { isCartOpenSelector } from '../../store/cart/cart.selector';
 
 import { NavigationContainer, LogoContainer, NavLinkContainer, NavLinksContainer, Logo } from './navigation.styles.js';
-import { CartSliceSelector } from '../../store/cart/cart.selector';
+
 
 const NavBar = () => {
 
-  const  {isCartOpen} = useSelector(CartSliceSelector);
+  const  isCartOpen = useSelector(isCartOpenSelector);
 
   const currentUser = useSelector((state) => userSelector(state));
 
