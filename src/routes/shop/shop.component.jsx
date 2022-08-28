@@ -11,7 +11,7 @@ const Shop = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    fetchCategoriesAsync(dispatch);
+    dispatch(fetchCategoriesAsync());
   }, []);
 
   return (

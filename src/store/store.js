@@ -8,12 +8,13 @@ import storage from 'redux-persist/lib/storage';
 import { rootReducer } from './root.reducer';
 
 
-const middlewares = [process.env.NODE_ENV !== 'production' && logger].filter(Boolean);  // OR !==production
+const middlewares = [process.env.NODE_ENV !== 'production' && logger, thunk].filter(Boolean);  // OR !==production
 
 const persistConfig = {
   key: 'root',           //persist whole thing,  start from root level
   storage,               //what do we want to store this into
   blacklist: ['user'],   //don't want to persist, bcz authListener will takeCare
+  whitelist : ['cart'],
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
